@@ -16,6 +16,7 @@ lint:
 
 lintfix:
 	swift run swiftlint autocorrect
+	swift run swiftformat .
 
 clean:
 	rm -rf .build
