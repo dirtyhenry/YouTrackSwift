@@ -70,7 +70,8 @@ extension Issue: Decodable {
                             return
                         }
                     default:
-                        debugPrint("Ignoring \(customFieldName)")
+                        // Ignoring customFieldName
+                        break
                     }
                 }
             }
