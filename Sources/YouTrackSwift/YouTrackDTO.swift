@@ -12,7 +12,7 @@ public struct Sprint: Codable {
 
 public struct DetailedSprint: Codable {
     public struct IssueLite: Codable {
-        public let summary: String
+        public let summary: String?
         public let idReadable: String
         public let id: String
     }
