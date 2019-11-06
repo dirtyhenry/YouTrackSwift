@@ -26,10 +26,10 @@ public struct Issue {
     public let summary: String
     public let idReadable: String
     public let id: String
-    
+
     public let assignee: String?
     public let storyPoints: Int?
-    
+
     enum CodingKeys: String, CodingKey {
         case summary
         case id
@@ -41,20 +41,20 @@ public struct Issue {
 extension Issue: Decodable {
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        
+
         id = try values.decode(String.self, forKey: .id)
         idReadable = try values.decode(String.self, forKey: .idReadable)
         summary = try values.decode(String.self, forKey: .summary)
-        
-        var fetchedAssignee: String? = nil
-        var fetchedStoryPoints: Int? = nil
+
+        var fetchedAssignee: String?
+        var fetchedStoryPoints: Int?
         if case let .array(allCustomFields) = try values.decode(JSON.self, forKey: .customFields) {
             allCustomFields.forEach { customField in
                 if case let .dictionary(customFieldAsDict) = customField {
                     guard case let .string(customFieldName) = customFieldAsDict["name"] else {
                         return
                     }
-                    
+
                     switch customFieldName {
                     case "Assignee":
                         if case let .dictionary(valueDict) = customFieldAsDict["value"],
