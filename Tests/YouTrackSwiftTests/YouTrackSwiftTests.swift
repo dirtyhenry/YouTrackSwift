@@ -3,14 +3,14 @@ import YouTrackSwift
 
 final class YouTrackServiceTests: XCTestCase {
     private var service: YouTrackService!
-    
+
     override func setUp() {
         service = YouTrackService(
             baseURL: TestConfig.baseURL,
             authorizationHeader: TestConfig.authorizationHeader
         )
     }
-    
+
     func testAgilesFetching() {
         let completion = XCTestExpectation(description: "Listing agiles completes")
         var result: Result<[Agile], YouTrackError>?
@@ -18,7 +18,7 @@ final class YouTrackServiceTests: XCTestCase {
             result = fetchedResult
             completion.fulfill()
         }
-        
+
         wait(for: [completion], timeout: 5.0)
         XCTAssertNotNil(result)
         if case let .success(agilesCollection) = result {
@@ -29,7 +29,7 @@ final class YouTrackServiceTests: XCTestCase {
             XCTFail("fetching agiles failed")
         }
     }
-    
+
     func testAgileSprintsFetching() {
         let completion = XCTestExpectation(description: "Listing sprints of an agile completes")
         var result: Result<[Sprint], YouTrackError>?
@@ -37,7 +37,7 @@ final class YouTrackServiceTests: XCTestCase {
             result = fetchedResult
             completion.fulfill()
         }
-        
+
         wait(for: [completion], timeout: 5.0)
         XCTAssertNotNil(result)
         if case let .success(sprintCollection) = result {
@@ -55,7 +55,7 @@ final class YouTrackServiceTests: XCTestCase {
             result = fetchedResult
             completion.fulfill()
         }
-        
+
         wait(for: [completion], timeout: 5.0)
         XCTAssertNotNil(result)
         switch (result!) {
@@ -67,7 +67,7 @@ final class YouTrackServiceTests: XCTestCase {
             XCTFail(error.localizedDescription)
         }
     }
-    
+
     func testIssueFetching() {
         let completion = XCTestExpectation(description: "Fetching issue completes")
         var result: Result<Issue, YouTrackError>?
@@ -75,7 +75,7 @@ final class YouTrackServiceTests: XCTestCase {
             result = fetchedResult
             completion.fulfill()
         }
-        
+
         wait(for: [completion], timeout: 5.0)
         XCTAssertNotNil(result)
         switch (result!) {
