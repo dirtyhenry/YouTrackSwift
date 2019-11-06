@@ -14,7 +14,9 @@ extension YouTrackError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .decodingFailed(let error, let data):
-            return "Couldn't decode data (error: \(error), data: \(String(data: data, encoding: .utf8) ?? "--data couldn't be represented as UTF-8 string--")"
+            let dataAsString = String(data: data, encoding: .utf8)
+                ?? "--data couldn't be represented as UTF-8 string--"
+            return "Decoding failed (error: \(error), data: \(dataAsString)"
         case .emptyResponse:
             return "YouTrack didn't respond with data"
         case .noHTTPResponse:

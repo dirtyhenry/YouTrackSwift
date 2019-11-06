@@ -57,16 +57,20 @@ public final class YouTrackService: YouTrackServiceProtocol {
         sprintID: String,
         completion: @escaping (Result<DetailedSprint, YouTrackError>) -> Void
     ) {
+        // swiftlint:disable line_length
         fetch(urlAsString: "\(baseURL)/agiles/\(agileID)/sprints/\(sprintID)/?fields=id,name,issues(id,idReadable,summary)",
               completion: completion)
+        // swiftlint:enable line_length
     }
 
     public func fetchIssue(
         issueID: String,
         completion: @escaping (Result<Issue, YouTrackError>) -> Void
     ) {
+        // swiftlint:disable line_length
         fetch(urlAsString: "\(baseURL)/issues/\(issueID)?fields=id,idReadable,summary,customFields($type,id,name,projectCustomField($type,id,field($type,id,name)),value($type,id,isResolved,name))",
               completion: completion)
+        // swiftlint:enable line_length
     }
 
     private func fetch<Resource: Decodable>(

@@ -51,20 +51,31 @@ final class YouTrackServiceTests: XCTestCase {
     func testSprintIssuesFetching() {
         let completion = XCTestExpectation(description: "Listing issues of a sprint completes")
         var result: Result<DetailedSprint, YouTrackError>?
-        service.listSprintIssues(agileID: TestConfig.defaultAgileID, sprintID: TestConfig.defaultSprintID) { fetchedResult in
+        service.listSprintIssues(
+            agileID: TestConfig.defaultAgileID,
+            sprintID: TestConfig.defaultSprintID
+        ) { fetchedResult in
             result = fetchedResult
             completion.fulfill()
         }
 
         wait(for: [completion], timeout: 5.0)
-        XCTAssertNotNil(result)
-        switch (result!) {
+        switch result {
         case let .success(detailedSprint):
             XCTAssertEqual(detailedSprint.id, TestConfig.defaultSprintID)
-            XCTAssertEqual(detailedSprint.issues.count, TestConfig.numberOfIssuesOfDefaultSprint)
-            XCTAssert(detailedSprint.issues.filter { $0.idReadable == TestConfig.defaultIssueIDOfDefaultSprint }.count == 1)
+            XCTAssertEqual(
+                detailedSprint.issues.count,
+                TestConfig.numberOfIssuesOfDefaultSprint
+            )
+            XCTAssertEqual(
+                detailedSprint
+                    .issues
+                    .filter { $0.idReadable == TestConfig.defaultIssueIDOfDefaultSprint }
+                    .count, 1)
         case let .failure(error):
             XCTFail(error.localizedDescription)
+        case nil:
+            XCTFail("Result must not be nil after completion")
         }
     }
 
@@ -77,8 +88,8 @@ final class YouTrackServiceTests: XCTestCase {
         }
 
         wait(for: [completion], timeout: 5.0)
-        XCTAssertNotNil(result)
-        switch (result!) {
+
+        switch result {
         case let .success(issue):
             XCTAssertEqual(issue.id, TestConfig.defaultIssueID)
             XCTAssertEqual(issue.idReadable, TestConfig.defaultIssueReadableID)
@@ -87,6 +98,8 @@ final class YouTrackServiceTests: XCTestCase {
             XCTAssertEqual(issue.storyPoints, TestConfig.defaultIssueStoryPoints)
         case let .failure(error):
             XCTFail(error.localizedDescription)
+        case nil:
+            XCTFail("Result must not be nil after completion")
         }
     }
 }
