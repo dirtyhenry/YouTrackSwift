@@ -24,6 +24,7 @@ public struct DetailedSprint: Codable {
 
 public struct Issue {
     public let summary: String
+    public let idReadable: String
     public let id: String
     
     public let assignee: String?
@@ -32,6 +33,7 @@ public struct Issue {
     enum CodingKeys: String, CodingKey {
         case summary
         case id
+        case idReadable
         case customFields
     }
 }
@@ -41,6 +43,7 @@ extension Issue: Decodable {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
         id = try values.decode(String.self, forKey: .id)
+        idReadable = try values.decode(String.self, forKey: .idReadable)
         summary = try values.decode(String.self, forKey: .summary)
         
         var fetchedAssignee: String? = nil

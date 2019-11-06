@@ -81,6 +81,7 @@ final class YouTrackServiceTests: XCTestCase {
         switch (result!) {
         case let .success(issue):
             XCTAssertEqual(issue.id, TestConfig.defaultIssueID)
+            XCTAssertEqual(issue.idReadable, TestConfig.defaultIssueReadableID)
             XCTAssertEqual(issue.summary, TestConfig.defaultIssueSummary)
             XCTAssertEqual(issue.assignee, TestConfig.defaultIssueAssignee)
             XCTAssertEqual(issue.storyPoints, TestConfig.defaultIssueStoryPoints)

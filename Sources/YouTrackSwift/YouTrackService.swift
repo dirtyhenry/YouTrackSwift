@@ -65,7 +65,7 @@ public final class YouTrackService: YouTrackServiceProtocol {
         issueID: String,
         completion: @escaping (Result<Issue, YouTrackError>) -> Void
     ) {
-        fetch(urlAsString: "\(baseURL)/issues/\(issueID)?fields=id,summary,customFields($type,id,name,projectCustomField($type,id,field($type,id,name)),value($type,id,isResolved,name))",
+        fetch(urlAsString: "\(baseURL)/issues/\(issueID)?fields=id,idReadable,summary,customFields($type,id,name,projectCustomField($type,id,field($type,id,name)),value($type,id,isResolved,name))",
               completion: completion)
     }
     
