@@ -71,7 +71,8 @@ final class YouTrackServiceTests: XCTestCase {
                 detailedSprint
                     .issues
                     .filter { $0.idReadable == TestConfig.defaultIssueIDOfDefaultSprint }
-                    .count, 1)
+                    .count, 1
+            )
         case let .failure(error):
             XCTFail(error.localizedDescription)
         case nil:

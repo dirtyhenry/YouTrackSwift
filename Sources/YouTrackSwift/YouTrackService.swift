@@ -2,24 +2,24 @@ import Foundation
 
 public protocol YouTrackServiceProtocol {
     func listAgiles(
-        completion: @escaping(Result<[Agile], YouTrackError>) -> Void
+        completion: @escaping (Result<[Agile], YouTrackError>) -> Void
     )
 
     func listAgileSprints(
         agileID: String,
         nbOfResults: Int,
-        completion: @escaping(Result<[Sprint], YouTrackError>) -> Void
+        completion: @escaping (Result<[Sprint], YouTrackError>) -> Void
     )
 
     func listSprintIssues(
         agileID: String,
         sprintID: String,
-        completion: @escaping(Result<DetailedSprint, YouTrackError>) -> Void
+        completion: @escaping (Result<DetailedSprint, YouTrackError>) -> Void
     )
 
     func fetchIssue(
         issueID: String,
-        completion: @escaping(Result<Issue, YouTrackError>) -> Void
+        completion: @escaping (Result<Issue, YouTrackError>) -> Void
     )
 }
 
@@ -44,7 +44,7 @@ public final class YouTrackService: YouTrackServiceProtocol {
     public func listAgileSprints(
         agileID: String,
         nbOfResults: Int = 100,
-        completion: @escaping(Result<[Sprint], YouTrackError>) -> Void
+        completion: @escaping (Result<[Sprint], YouTrackError>) -> Void
     ) {
         fetch(
             urlAsString: "\(baseURL)/agiles/\(agileID)/sprints?$top=\(nbOfResults)&fields=id,name",
@@ -58,8 +58,10 @@ public final class YouTrackService: YouTrackServiceProtocol {
         completion: @escaping (Result<DetailedSprint, YouTrackError>) -> Void
     ) {
         // swiftlint:disable line_length
-        fetch(urlAsString: "\(baseURL)/agiles/\(agileID)/sprints/\(sprintID)/?fields=id,name,issues(id,idReadable,summary)",
-              completion: completion)
+        fetch(
+            urlAsString: "\(baseURL)/agiles/\(agileID)/sprints/\(sprintID)/?fields=id,name,issues(id,idReadable,summary)",
+            completion: completion
+        )
         // swiftlint:enable line_length
     }
 
@@ -68,14 +70,16 @@ public final class YouTrackService: YouTrackServiceProtocol {
         completion: @escaping (Result<Issue, YouTrackError>) -> Void
     ) {
         // swiftlint:disable line_length
-        fetch(urlAsString: "\(baseURL)/issues/\(issueID)?fields=id,idReadable,summary,customFields($type,id,name,projectCustomField($type,id,field($type,id,name)),value($type,id,isResolved,name))",
-              completion: completion)
+        fetch(
+            urlAsString: "\(baseURL)/issues/\(issueID)?fields=id,idReadable,summary,customFields($type,id,name,projectCustomField($type,id,field($type,id,name)),value($type,id,isResolved,name))",
+            completion: completion
+        )
         // swiftlint:enable line_length
     }
 
     private func fetch<Resource: Decodable>(
         urlAsString: String,
-        completion: @escaping(Result<Resource, YouTrackError>) -> Void
+        completion: @escaping (Result<Resource, YouTrackError>) -> Void
     ) {
         guard let fetchURL = URL(string: urlAsString) else {
             return completion(.failure(.urlFailed))
@@ -95,7 +99,7 @@ public final class YouTrackService: YouTrackServiceProtocol {
                 return completion(.failure(.noHTTPResponse))
             }
 
-            guard httpResponse.statusCode >= 200 && httpResponse.statusCode < 300 else {
+            guard httpResponse.statusCode >= 200, httpResponse.statusCode < 300 else {
                 let message = data
                     .map { String(data: $0, encoding: .utf8) ?? "--data couldn't be converted to String--" }
                 return completion(.failure(.statusCodeErrored(code: httpResponse.statusCode, message: message)))
