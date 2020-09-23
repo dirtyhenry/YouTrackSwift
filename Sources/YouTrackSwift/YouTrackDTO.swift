@@ -38,6 +38,11 @@ public struct Issue {
     }
 }
 
+public struct SavedQuery: Codable {
+    public let id: String
+    public let name: String
+}
+
 extension Issue: Decodable {
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)

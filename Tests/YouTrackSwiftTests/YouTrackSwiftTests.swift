@@ -103,4 +103,23 @@ final class YouTrackServiceTests: XCTestCase {
             XCTFail("Result must not be nil after completion")
         }
     }
+
+    func testSavedQueriesFetching() {
+        let completion = XCTestExpectation(description: "Listing saved queries completes")
+        var result: Result<[SavedQuery], YouTrackError>?
+        service.listSavedQueries { fetchedResult in
+            result = fetchedResult
+            completion.fulfill()
+        }
+
+        wait(for: [completion], timeout: 5.0)
+        XCTAssertNotNil(result)
+        if case let .success(savedQueriesCollection) = result {
+            XCTAssert(savedQueriesCollection.count >= TestConfig.minimumNumberOfSavedQueries)
+            XCTAssert(savedQueriesCollection.filter { $0.id == TestConfig.defaultSavedQueryID }.count == 1)
+            XCTAssert(savedQueriesCollection.filter { $0.name == TestConfig.defaultSavedQueryName }.count == 1)
+        } else {
+            XCTFail("fetching agiles failed")
+        }
+    }
 }
