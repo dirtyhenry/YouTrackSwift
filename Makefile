@@ -1,9 +1,9 @@
 install:
+	brew bundle
 	swift package update
-	swift package generate-xcodeproj
 
 open:
-	open YouTrackSwift.xcodeproj
+	open Package.swift
 
 build:
 	swift build
@@ -19,4 +19,7 @@ lintfix:
 	swift run swiftformat .
 
 clean:
-	rm -rf .build
+	rm -rf .build .swiftpm
+
+doc:
+	swift doc generate Sources --module-name YouTrackSwift 

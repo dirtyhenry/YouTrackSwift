@@ -21,6 +21,10 @@ public protocol YouTrackServiceProtocol {
         issueID: String,
         completion: @escaping (Result<Issue, YouTrackError>) -> Void
     )
+
+    func listSavedQueries(
+        completion: @escaping (Result<[SavedQuery], YouTrackError>) -> Void
+    )
 }
 
 public final class YouTrackService: YouTrackServiceProtocol {
@@ -63,6 +67,13 @@ public final class YouTrackService: YouTrackServiceProtocol {
             completion: completion
         )
         // swiftlint:enable line_length
+    }
+
+    public func listSavedQueries(completion: @escaping (Result<[SavedQuery], YouTrackError>) -> Void) {
+        fetch(
+            urlAsString: "\(baseURL)/savedQueries/?fields=id,name",
+            completion: completion
+        )
     }
 
     public func fetchIssue(
